@@ -55,9 +55,16 @@ public class UserController {
         if (requestDTO.getUsername().length()<3){
             return "error/400";
         }
-        // 2. modle에게 위임하기
-        userRepository.save(requestDTO);
+        // 2. 동일 username 체크
+        User user = userRepository.findByUsername(requestDTO.getUsername());
+        if (user == null){
+            // 3. modle에게 위임하기
+            userRepository.save(requestDTO);
+        }else {
+            return "error/400";
+        }
         return "redirect:/loginForm";
+
     }
     @GetMapping("/joinForm")
     public String joinForm() {
