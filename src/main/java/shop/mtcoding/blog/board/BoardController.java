@@ -5,20 +5,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import shop.mtcoding.blog.user.User;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class BoardController {
     private final HttpSession session;
+    private final BoardRepository boardRepository;
     @GetMapping({ "/", "/board" })
-    public String index() {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-//        if (sessionUser == null){
-//            System.out.println("로그인 안된 상태입니다.");
-//        }else {
-//            System.out.println("로그인 된 상태입니다.");
-//        }
+    public String index(HttpServletRequest request) {
+        List<Board> boardList = boardRepository.findAll();
+        System.out.println(boardList);
+//        User sessionUser = (User) session.getAttribute("sessionUser");
+        request.setAttribute("boardList",boardList);
         return "index";
     }
 
