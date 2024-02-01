@@ -18,10 +18,21 @@ public class BoardController {
     @GetMapping({ "/", "/board" })
     public String index(HttpServletRequest request, @RequestParam(defaultValue = "0") int page) {
         System.out.println("페이지: "+page);
-        List<Board> boardList = boardRepository.findAll();
+        List<Board> boardList = boardRepository.findAll(page);
         System.out.println(boardList);
 //        User sessionUser = (User) session.getAttribute("sessionUser");
         request.setAttribute("boardList",boardList);
+
+        int currentPage = page;
+        int nextPage = currentPage+1;
+        int prevPage = currentPage-1;
+        request.setAttribute("nextPage",nextPage);
+        request.setAttribute("prevPage",prevPage);
+
+        boolean first = currentPage == 0 ? true : false;
+        int totalCount = 4;
+        boolean last = true;
+        request.setAttribute("first", first);
         return "index";
     }
 
