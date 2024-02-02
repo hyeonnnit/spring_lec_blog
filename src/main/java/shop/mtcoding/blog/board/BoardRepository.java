@@ -1,21 +1,22 @@
 package shop.mtcoding.blog.board;
 
-import lombok.Data;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import shop.mtcoding.blog._core.Constant;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.math.BigInteger;
 import java.util.List;
+
+
 @Repository
 @RequiredArgsConstructor
 public class BoardRepository {
     private final EntityManager em;
     public int count(){
         Query query = em.createNativeQuery("select count(*) from board_tb");
-        BigInteger count = (BigInteger) query.getSingleResult();
+        Long count = (Long) query.getSingleResult();
         return count.intValue();
     }
     public List<Board> findAll(int page){
@@ -26,5 +27,13 @@ public class BoardRepository {
 
         List<Board> boardList = query.getResultList();
         return boardList;
+    }
+
+    public void findById(int id) {
+        // Entity가 아닌 것은 JPA가 파싱안해준다.
+        Query query = em.createNativeQuery("select * from board_tb bt inner join user_tb ut on bt.user_id = ut.id where bt.id=?", Board.class);
+        query.setParameter(1, id);
+        Object[] rs = (Object[]) query.getSingleResult();
+
     }
 }

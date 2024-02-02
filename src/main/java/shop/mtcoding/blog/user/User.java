@@ -1,10 +1,9 @@
 package shop.mtcoding.blog.user;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Generated;
 import org.hibernate.annotations.CreationTimestamp;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
