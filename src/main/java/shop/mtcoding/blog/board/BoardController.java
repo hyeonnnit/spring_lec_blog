@@ -42,8 +42,9 @@ public class BoardController {
     }
 
     @GetMapping("/board/{id}")
-    public String detail(@PathVariable int id) {
-        boardRepository.findById(id);
+    public String detail(@PathVariable int id, HttpServletRequest request) {
+        BoardResponse.DetailDTO responseDTO=boardRepository.findById(id);
+        request.setAttribute("board",responseDTO);
         return "board/detail";
     }
 }

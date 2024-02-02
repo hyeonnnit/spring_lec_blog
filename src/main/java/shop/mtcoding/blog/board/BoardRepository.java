@@ -4,6 +4,7 @@ package shop.mtcoding.blog.board;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
+import org.qlrm.mapper.JpaResultMapper;
 import org.springframework.stereotype.Repository;
 import shop.mtcoding.blog._core.Constant;
 
@@ -29,11 +30,13 @@ public class BoardRepository {
         return boardList;
     }
 
-    public void findById(int id) {
+    public BoardResponse.DetailDTO findById(int id) {
         // Entity가 아닌 것은 JPA가 파싱안해준다.
-        Query query = em.createNativeQuery("select * from board_tb bt inner join user_tb ut on bt.user_id = ut.id where bt.id=?", Board.class);
+        Query query = em.createNativeQuery("select bt.id, bt.title, bt.content, bt.user_id, ut.username, bt.created_at from board_tb bt inner join user_tb ut on bt.user_id = ut.id where bt.id=?");
         query.setParameter(1, id);
-        Object[] rs = (Object[]) query.getSingleResult();
 
+        JpaResultMapper rm = new JpaResultMapper();
+        BoardResponse.DetailDTO responseDTO = rm.uniqueResult(query, BoardResponse.DetailDTO.class);
+        return responseDTO;
     }
 }
