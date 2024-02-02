@@ -3,6 +3,7 @@ package shop.mtcoding.blog.board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import shop.mtcoding.blog._core.PagingUtil;
 import shop.mtcoding.blog.user.User;
@@ -28,7 +29,7 @@ public class BoardController {
         request.setAttribute("prevPage", prevPage);
 
         boolean first = PagingUtil.isFirst(currentPage);
-        boolean last = PagingUtil.isLast(currentPage, 4);
+        boolean last = PagingUtil.isLast(currentPage, boardRepository.count());
 
         request.setAttribute("first", first);
         request.setAttribute("last", last);
@@ -41,8 +42,9 @@ public class BoardController {
         return "board/saveForm";
     }
 
-    @GetMapping("/board/1")
-    public String detail() {
+    @GetMapping("/board/{id}")
+    public String detail(@PathVariable int id) {
+        System.out.println(id);
         return "board/detail";
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 public class BoardRepository {
     private final EntityManager em;
     public int count(){
-        Query query = em.createNativeQuery("select count(*) from board_table");
+        Query query = em.createNativeQuery("select count(*) from board_tb");
         BigInteger count = (BigInteger) query.getSingleResult();
         return count.intValue();
     }

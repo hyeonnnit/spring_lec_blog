@@ -1,5 +1,6 @@
 package shop.mtcoding.blog._core;
 
+
 public class PagingUtil {
 
     public static boolean isFirst(int currentPage){
