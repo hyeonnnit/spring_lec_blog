@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class UserController {
     private final UserRepository userRepository;
+    // IoC 컨테이너에 세션에 접근할 수 있는 변수가 들어가 있음 DI하면 됨
     private final HttpSession session;
 //    public UserController(){
 //        System.out.println("기본 생성자");
