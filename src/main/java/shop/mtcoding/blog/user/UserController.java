@@ -1,5 +1,6 @@
 package shop.mtcoding.blog.user;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -76,9 +77,31 @@ public class UserController {
     public String loginForm() {
         return "user/loginForm";
     }
-
+    @PostMapping("/user/update")
+    public String update(UserRequest.UpdateDTO requestDTO){
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) {
+            return "redirect:/updateForm";
+        }
+        User user = userRepository.findByUsernameAndEmail(sessionUser.getId());
+        if (user == null){
+            return "error/400";
+        }
+        if (user.getPassword().equals(sessionUser.getPassword())){
+            return "error/403";
+        }
+        userRepository.passwordUpdate(requestDTO, sessionUser.getId());
+        return "user/updateForm";
+    }
     @GetMapping("/user/updateForm")
-    public String updateForm() {
+    public String updateForm(UserRequest.UpdateDTO requestDTO, HttpServletRequest request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) {
+            return "redirect:/updateForm";
+        }
+
+        User user = userRepository.findByUsernameAndEmail(sessionUser.getId());
+        request.setAttribute("sessionUser", user);
         return "user/updateForm";
     }
 

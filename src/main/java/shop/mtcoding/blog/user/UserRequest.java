@@ -17,4 +17,8 @@ public class UserRequest {
         private String username;
         private String password;
     }
+    @Data
+    public class UpdateDTO {
+        private String password;
+    }
 }
