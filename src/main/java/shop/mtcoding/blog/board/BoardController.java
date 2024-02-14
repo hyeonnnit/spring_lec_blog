@@ -60,5 +60,6 @@ public class BoardController {
         }
         request.setAttribute("owner",owner);
         return "board/detail";
+
     }
 }
