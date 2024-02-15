@@ -21,16 +21,16 @@ public class BoardController {
     // ?title=제목1&content=내용1
     // title=제목1&content=내용1
     @PostMapping("/board/{id}/update")
-    public String update(@PathVariable int id, BoardRequest.UpdateDTO requestDTO){
+    public String update(@PathVariable int id, BoardRequest.UpdateDTO requestDTO) {
         // 1. 인증 체크
         User sessionUser = (User) session.getAttribute("sessionUser");
-        if(sessionUser == null){
+        if (sessionUser == null) {
             return "redirect:/loginForm";
         }
 
         // 2. 권한 체크
         Board board = boardRepository.findById(id);
-        if(board.getUserId() != sessionUser.getId()){
+        if (board.getUserId() != sessionUser.getId()) {
             return "error/403";
         }
 
@@ -38,15 +38,15 @@ public class BoardController {
         // update board_tb set title = ?, content = ? where id = ?;
         boardRepository.update(requestDTO, id);
 
-        return "redirect:/board/"+id;
+        return "redirect:/board/" + id;
     }
 
 
     @GetMapping("/board/{id}/updateForm")
-    public String updateForm(@PathVariable int id, HttpServletRequest request){
+    public String updateForm(@PathVariable int id, HttpServletRequest request) {
         // 1. 인증 안되면 나가
         User sessionUser = (User) session.getAttribute("sessionUser");
-        if(sessionUser == null){
+        if (sessionUser == null) {
             return "redirect:/loginForm";
         }
 
@@ -54,7 +54,7 @@ public class BoardController {
         // 모델 위임 (id로 board를 조회)
         Board board = boardRepository.findById(id);
 
-        if(board.getUserId() != sessionUser.getId()){
+        if (board.getUserId() != sessionUser.getId()) {
             return "error/403";
         }
 
@@ -138,8 +138,10 @@ public class BoardController {
         return "board/saveForm";
     }
 
+
+
     @GetMapping("/board/{id}")
-    public String detail(@PathVariable int id, HttpServletRequest request) {
+    public String detail(@PathVariable("id") int id, HttpServletRequest request) {
         // 1. 모델 진입 - 상세보기 데이터 가져오기
         BoardResponse.DetailDTO responseDTO = boardRepository.findByIdWithUser(id);
 
