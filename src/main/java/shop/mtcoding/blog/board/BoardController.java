@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import shop.mtcoding.blog.reply.ReplyRepository;
 import shop.mtcoding.blog.user.User;
 
@@ -115,12 +116,23 @@ public class BoardController {
         return "redirect:/";
     }
 
+    // localhost:8080?page=1 -> page 값이 1
+    // localhost:8080/
+    @GetMapping("/")
+    public String index(HttpServletRequest request,
+                        @RequestParam(value = "page", defaultValue = "0") Integer page) {
 
-    @GetMapping({"/", "/board"})
-    public String index(HttpServletRequest request) {
+        List<Board> boardList = boardRepository.findAll(page);
 
-        List<Board> boardList = boardRepository.findAll();
+        // 전체 페이지 개수
+        int count = boardRepository.count().intValue();
+        int theRest = count % 3 == 0 ? 0 : 1;
+        int allPageCount = count / 3 + theRest;
         request.setAttribute("boardList", boardList);
+        request.setAttribute("first", page == 0);
+        request.setAttribute("last", allPageCount == page + 1);
+        request.setAttribute("prev", page - 1);
+        request.setAttribute("next", page + 1);
 
         return "index";
     }
@@ -139,7 +151,6 @@ public class BoardController {
         }
         return "board/saveForm";
     }
-
 
 
     @GetMapping("/board/{id}")
