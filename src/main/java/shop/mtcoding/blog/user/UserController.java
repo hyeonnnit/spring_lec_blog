@@ -43,7 +43,12 @@ public class UserController {
     public String join(UserRequest.JoinDTO requestDTO) {
         System.out.println(requestDTO);
 
-        userRepository.save(requestDTO); // 모델에 위임하기
+       try {
+           userRepository.save(requestDTO); // 모델에 위임하기
+       }catch (Exception e){
+           throw new RuntimeException("아이디가 중복되었어요.");
+
+       }
         return "redirect:/loginForm";
     }
 
